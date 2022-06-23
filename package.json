@@ -1,0 +1,19 @@
+{
+  "name": "moviesdb",
+  "version": "1.0.0",
+  "description": "App the Movies, API REST con JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JhonDev365/MoviesDB.git"
+  },
+  "author": "JhonDev365",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JhonDev365/MoviesDB/issues"
+  },
+  "homepage": "https://github.com/JhonDev365/MoviesDB#readme"
+}
