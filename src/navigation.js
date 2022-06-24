@@ -7,7 +7,8 @@ trendingBtn.addEventListener('click', () =>{
 });
 
 arrowBtn.addEventListener('click', () =>{
-    location.hash =  window.history.back();
+    // location.hash =  window.history.back();
+    history.back();
 });
 
 window.addEventListener('DOMContentLoaded', navigator, false);
@@ -138,4 +139,7 @@ function trendsPage() {
 
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
+    headerCategoryTitle.innerHTML = 'Tendencias';
+    getTrendingMovies();
 }
