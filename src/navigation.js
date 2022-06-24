@@ -33,6 +33,8 @@ function navigator() {
     location.hash.startsWith('#movie=')    ? moviePage() :
     location.hash.startsWith('#category=') ? categoriesPage()   :
     homePage()
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 }
 
 function homePage() {
@@ -71,6 +73,13 @@ function categoriesPage() {
 
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
+    // ['#category', 'id-name]
+    const [_, categoryData] = location.hash.split('=');
+    const [categoryId, categoryName] = categoryData.split('-');
+    headerCategoryTitle.innerHTML = categoryName;
+
+    getMoviesByCategory(categoryId);
 }
 
 function moviePage() {
