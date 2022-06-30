@@ -19,8 +19,11 @@ const lazyLoader = new IntersectionObserver((entries) => {
     });
 });
 
-function crearMovies(movies, container, lazyLoad = false) {
-    container.innerHTML = '';
+function crearMovies(movies, container, {lazyLoad = false, clean = true,} = {}) {
+    if(clean){
+        container.innerHTML = '';
+    }
+    
 
     movies.forEach(movie => {
         const movieContainer = document.createElement('div');
@@ -152,12 +155,58 @@ async function getMoviesBySearch(query) {
     
 }
 
-async function getTrendingMovies() {
-    const { data } = await api(`trending/movie/day`)
-    // const data = await res.json();
+// async function getTrendingMovies() {
+//     const { data } = await api(`trending/movie/day`)
+//     // const data = await res.json();
+//     const movies = data.results;
+//     crearMovies(movies, genericSection, {lazyload: true, clean: true});
+
+//     const btnLoadMore = document.createElement('button');
+//     btnLoadMore.innerText = 'Cargar más';
+//     btnLoadMore.addEventListener('click', getPaginatedTrendingMovies);
+//     genericSection.appendChild(btnLoadMore);
+// }
+
+// let page = 1;
+
+// async function getPaginatedTrendingMovies() {
+//     page++;
+//     const { data } = await api(`trending/movie/day`, {
+//         params: {page},
+//     });
+//     // const data = await res.json();
+//     const movies = data.results;
+//     crearMovies(movies, genericSection, {lazyload: true, clean: false});
+//     const btnLoadMore = document.createElement('button');
+//     btnLoadMore.innerText = 'Cargar más';
+//     btnLoadMore.addEventListener('click', getPaginatedTrendingMovies);
+//     genericSection.appendChild(btnLoadMore);
+// }
+
+//OTRA FORMA REFACTORIZADO
+async function getTrendingMovies(page = 1){
+    const { data } = await api('/trending/movie/day', {
+        params: {
+            page,
+        }
+    });
+
     const movies = data.results;
-    crearMovies(movies, genericSection);
+
+    crearMovies(movies, genericSection, {
+        lazy: true,
+        clean: page == 1
+    });
+
+    const btnLoadMore = document.createElement('button');
+    btnLoadMore.innerText = "Load more";
+    btnLoadMore.addEventListener('click', () => {
+        btnLoadMore.style.display = 'none';
+        getTrendingMovies(page + 1);
+    });
+    genericSection.appendChild(btnLoadMore); 
 }
+
 
 
 async function getMovieById(id) {
