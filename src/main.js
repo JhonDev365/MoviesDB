@@ -155,57 +155,75 @@ async function getMoviesBySearch(query) {
     
 }
 
-// async function getTrendingMovies() {
-//     const { data } = await api(`trending/movie/day`)
-//     // const data = await res.json();
-//     const movies = data.results;
-//     crearMovies(movies, genericSection, {lazyload: true, clean: true});
+async function getTrendingMovies() {
+    const { data } = await api(`trending/movie/day`)
+    // const data = await res.json();
+    const movies = data.results;
+    crearMovies(movies, genericSection, {lazyload: true, clean: true});
 
-//     const btnLoadMore = document.createElement('button');
-//     btnLoadMore.innerText = 'Cargar más';
-//     btnLoadMore.addEventListener('click', getPaginatedTrendingMovies);
-//     genericSection.appendChild(btnLoadMore);
-// }
+    // const btnLoadMore = document.createElement('button');
+    // btnLoadMore.innerText = 'Cargar más';
+    // btnLoadMore.addEventListener('click', getPaginatedTrendingMovies);
+    // genericSection.appendChild(btnLoadMore);
+}
 
-// let page = 1;
 
-// async function getPaginatedTrendingMovies() {
-//     page++;
-//     const { data } = await api(`trending/movie/day`, {
-//         params: {page},
-//     });
-//     // const data = await res.json();
-//     const movies = data.results;
-//     crearMovies(movies, genericSection, {lazyload: true, clean: false});
-//     const btnLoadMore = document.createElement('button');
-//     btnLoadMore.innerText = 'Cargar más';
-//     btnLoadMore.addEventListener('click', getPaginatedTrendingMovies);
-//     genericSection.appendChild(btnLoadMore);
-// }
+
+async function getPaginatedTrendingMovies() {
+    const {scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight - 15);
+    
+    if(scrollIsBottom){
+        page++;
+    const { data } = await api(`trending/movie/day`, {
+        params: {page},
+    });
+    // const data = await res.json();
+    const movies = data.results;
+    crearMovies(movies, genericSection, {lazyload: true, clean: false});
+    }
+
+    
+
+    // const btnLoadMore = document.createElement('button');
+    // btnLoadMore.innerText = 'Cargar más';
+    // btnLoadMore.addEventListener('click', getPaginatedTrendingMovies);
+    // genericSection.appendChild(btnLoadMore);
+}
 
 //OTRA FORMA REFACTORIZADO
-async function getTrendingMovies(page = 1){
-    const { data } = await api('/trending/movie/day', {
-        params: {
-            page,
-        }
-    });
 
-    const movies = data.results;
+// window.addEventListener('scroll', getTrendingMovies);
 
-    crearMovies(movies, genericSection, {
-        lazy: true,
-        clean: page == 1
-    });
+// async function getTrendingMovies(page = 1){
+//     const {scrollTop, scrollHeight, clientHeight } = document.documentElement;
+//     const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight - 15);
 
-    const btnLoadMore = document.createElement('button');
-    btnLoadMore.innerText = "Load more";
-    btnLoadMore.addEventListener('click', () => {
-        btnLoadMore.style.display = 'none';
-        getTrendingMovies(page + 1);
-    });
-    genericSection.appendChild(btnLoadMore); 
-}
+//     if(scrollIsBottom) {
+//         const { data } = await api('/trending/movie/day', {
+//             params: {
+//                 page,
+//             }
+//         });
+    
+//         const movies = data.results;
+    
+//         crearMovies(movies, genericSection, {
+//             lazy: true,
+//             clean: page == 1
+//         });
+//     }
+
+    
+
+//     // const btnLoadMore = document.createElement('button');
+//     // btnLoadMore.innerText = "Load more";
+//     // btnLoadMore.addEventListener('click', () => {
+//     //     btnLoadMore.style.display = 'none';
+//     //     getTrendingMovies(page + 1);
+//     // });
+//     // genericSection.appendChild(btnLoadMore); 
+// }
 
 
 
