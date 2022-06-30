@@ -9,8 +9,17 @@ const api = axios.create({
 });
 
 // Utils
+// entries: elementos ue estamos obsevando
+const lazyLoader = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if(entry.isIntersecting){
+            const url = entry.target.getAttribute('data-img');
+        entry.target.setAttribute('src', url);
+        }
+    });
+});
 
-function crearMovies(movies, container) {
+function crearMovies(movies, container, lazyLoad = false) {
     container.innerHTML = '';
 
     movies.forEach(movie => {
@@ -22,9 +31,20 @@ function crearMovies(movies, container) {
 
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
+        
         movieImg.setAttribute('alt', 'movie.title');
-        movieImg.setAttribute('src', `https://image.tmdb.org/t/p/w300${movie.poster_path}`);
-
+        
+        //falta cambiar src por data-set
+        movieImg.setAttribute(lazyLoad ? 'data-img' : 'src', `https://image.tmdb.org/t/p/w300${movie.poster_path}`);
+        // para las imagenes que no cargan
+        movieImg.addEventListener('error', () => {
+            movieImg.setAttribute('src', 'https://static.platzi.com/static/images/error/img404.png',);
+        });
+        //funcion del intersecting observer
+        if(lazyLoad){
+            lazyLoader.observe(movieImg);
+        }
+        
         movieContainer.appendChild(movieImg);
         container.appendChild(movieContainer);
     });
@@ -60,7 +80,7 @@ async function getTrendingMoviesPreview() {
     // const data = await res.json();
     const movies = data.results;
     // console.log(movies);
-    crearMovies(movies, trendingMoviesPreviewList);
+    crearMovies(movies, trendingMoviesPreviewList, true);
     // trendingMoviesPreviewList.innerHTML = '';
 
     // movies.forEach(movie => {
@@ -101,7 +121,7 @@ async function getMoviesByCategory(id) {
     // const data = await res.json();
     const movies = data.results;
 
-    crearMovies(movies, genericSection);
+    crearMovies(movies, genericSection, true);
     // genericSection.innerHTML = '';
 
     // movies.forEach(movie => {
